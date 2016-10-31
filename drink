@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Drink
+{
+    //咖啡豆种类枚举
+    enum beantypes : byte
+    {
+        敏捷咖啡豆 = 1,
+        怪味咖啡豆 = 2,
+        巧克力咖啡豆 = 3
+    }
+    //茶叶种类枚举
+    enum leaftypes :byte
+    {
+        红茶=1,
+        绿茶=2,
+        乌龙茶=3
+    }
+    //主类
+    class CoffeeorTea
+    {
+        static void Main(string[] args)
+        {
+            string type;
+            string time;
+            string milk;
+            int bean;
+            int leaf;
+            string countinue=" ";
+            do {
+                Console.WriteLine("请问要什么饮料?可选 咖啡，茶");
+                type = Console.ReadLine();
+                if (type == "咖啡")
+                {
+                    CupOFCoffee cof = new CupOFCoffee();
+                    Console.WriteLine("请问需要哪种豆子？<1> 敏捷咖啡豆<2>怪味咖啡豆<3> 巧克力咖啡豆");
+                    bean = Convert.ToInt32(Console.ReadLine());
+                    cof.BeanType = (beantypes)bean;
+                    Console.WriteLine("请问是否立即需要？");
+                    time = Console.ReadLine();
+                    cof.instant = time == "是";
+                    Console.WriteLine("请问是否需要牛奶？");
+                    milk = Console.ReadLine();
+                    cof.milk = milk == "是";
+                    Console.WriteLine("请问糖的克数？可选<0~50>");
+                    do {
+                        cof.sugar = Convert.ToInt32(Console.ReadLine());
+                        if (cof.sugar<0||cof.sugar>50) {
+                            Console.WriteLine("输入错误请重新输入");
+                        }
+                    } while (cof.sugar<0||cof.sugar>50);
+                    Console.WriteLine(cof.drink());
+                    Console.WriteLine("是否继续点单？");
+                    countinue = Console.ReadLine();
+                }
+                else
+                {
+                    if (type == "茶")
+                    {
+                        CupOFTea cot = new CupOFTea();
+                        Console.WriteLine("请问需要哪种茶？<1>红茶 <2>绿茶<3> 乌龙茶 ");
+                        leaf = Convert.ToInt32(Console.ReadLine());
+                        cot.LeafType = (leaftypes)leaf;
+                        Console.WriteLine("请问是否立即需要？");
+                        time = Console.ReadLine();
+                        cot.instant = time == "是";
+                        Console.WriteLine("请问是否需要牛奶？");
+                        milk = Console.ReadLine();
+                        cot.milk = milk == "是";
+                        Console.WriteLine("请问糖的克数？可选<0~50>");
+                        do
+                        {
+                            cot.sugar = Convert.ToInt32(Console.ReadLine());
+                            if (cot.sugar < 0 || cot.sugar > 50)
+                            {
+                                Console.WriteLine("输入错误请重新输入");
+                            }
+                        } while (cot.sugar < 0 || cot.sugar > 50);
+                        Console.WriteLine(cot.drink());
+                        Console.WriteLine("是否继续点单？");
+                        countinue = Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("ERROR");
+                        Console.WriteLine("重新输入或直接退出。是否继续点单？");
+                        countinue = Console.ReadLine();
+                    }
+                }
+            } while (countinue=="是");
+        }
+    }
+    //基类
+    class IHotDrink
+    {
+        public bool instant=false;
+        public bool milk=false;
+        public int sugar;
+        public string Description;
+    }
+    //咖啡类
+    class CupOFCoffee : IHotDrink
+    {
+        public string Type="咖啡";
+        public beantypes BeanType;
+        public string drink()
+        {
+            Description = $"这是一杯立即需要为:{instant}，加牛奶为:{milk}，添加了:{sugar}克糖的{Type},豆子为：{BeanType}";
+            return Description;
+        }
+    }
+    //茶类
+    class CupOFTea : IHotDrink
+    {
+        public string Type = "茶";
+        public leaftypes LeafType;
+        public string drink()
+        {
+            Description = $"立即需要为:{instant}，加牛奶为:{milk}，添加了:{sugar}克糖的{Type},茶叶为：{LeafType}";
+            return Description;
+        }
+    }
+}
